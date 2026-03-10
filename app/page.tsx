@@ -1,7 +1,6 @@
 import CompanionCard from "@/components/CompanionCard";
 import CompanionsList from "@/components/CompanionsList";
 import CTA from "@/components/CTA";
-import {recentSessions} from "@/constants";
 import {getAllCompanions, getRecentSessions} from "@/lib/actions/companion.actions";
 import {getSubjectColor} from "@/lib/utils";
 
@@ -13,7 +12,7 @@ const Page = async () => {
     <main>
       <h1>Popular Companions</h1>
 
-        <section className="home-section">
+        <section className="flex gap-4 justify-between items-start w-full max-lg:flex-col max-lg:items-center">
             {companions.map((companion) => (
                 <CompanionCard
                     key={companion.id}
@@ -21,10 +20,9 @@ const Page = async () => {
                     color={getSubjectColor(companion.subject)}
                 />
             ))}
-
         </section>
 
-        <section className="home-section">
+        <section className="flex gap-4 justify-between items-start w-full max-lg:flex-col-reverse max-lg:items-center">
             <CompanionsList
                 title="Recently completed sessions"
                 companions={recentSessionsCompanions}
