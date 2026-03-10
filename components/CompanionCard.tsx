@@ -15,6 +15,20 @@ interface CompanionCardProps {
   bookmarked: boolean;
 }
 
+// Returns subject-specific accent color from Figma tokens
+const getAccentColor = (subject: string): string => {
+  const colors: Record<string, string> = {
+    science: "#a78bfa",
+    maths: "#fbbf24",
+    math: "#fbbf24",
+    history: "#f97316",
+    english: "#34d399",
+    coding: "#60a5fa",
+    language: "#f472b6",
+  };
+  return colors[subject?.toLowerCase()] ?? "#a78bfa";
+};
+
 const CompanionCard = ({
   id,
   name,
@@ -25,6 +39,8 @@ const CompanionCard = ({
   bookmarked,
 }: CompanionCardProps) => {
   const pathname = usePathname();
+  const accentColor = getAccentColor(subject);
+
   const handleBookmark = async () => {
     if (bookmarked) {
       await removeBookmark(id, pathname);
@@ -32,10 +48,28 @@ const CompanionCard = ({
       await addBookmark(id, pathname);
     }
   };
+
   return (
-    <article className="companion-card" style={{ backgroundColor: color }}>
-      <div className="flex justify-between items-center">
-        <div className="subject-badge">{subject}</div>
+    <article
+      className="companion-card"
+      style={{
+        borderLeft: `3px solid ${accentColor}`,
+        borderTop: `1px solid ${accentColor}`,
+        borderRight: `1px solid ${accentColor}`,
+        borderBottom: `1px solid ${accentColor}`,
+      }}
+    >
+      {/* Header row: badge + bookmark */}
+      <div className="flex justify-between items-center pr-6">
+        <div
+          className="subject-badge"
+          style={{
+            backgroundColor: `${accentColor}21`,
+            color: accentColor,
+          }}
+        >
+          {subject}
+        </div>
         <button className="companion-bookmark" onClick={handleBookmark}>
           <Image
             src={
@@ -48,8 +82,33 @@ const CompanionCard = ({
         </button>
       </div>
 
-      <h2 className="text-2xl font-bold">{name}</h2>
-      <p className="text-sm">{topic}</p>
+      {/* Name */}
+      <h2
+        style={{
+          fontFamily: '"Fraunces", serif',
+          fontWeight: 600,
+          fontSize: "20px",
+          lineHeight: "27.5px",
+          color: "#e2ddd6",
+        }}
+      >
+        {name}
+      </h2>
+
+      {/* Topic */}
+      <p
+        style={{
+          fontFamily: '"Syne", sans-serif',
+          fontWeight: 400,
+          fontSize: "14px",
+          lineHeight: "22.75px",
+          color: "#8e9bae",
+        }}
+      >
+        {topic}
+      </p>
+
+      {/* Duration */}
       <div className="flex items-center gap-2">
         <Image
           src="/icons/clock.svg"
@@ -57,11 +116,38 @@ const CompanionCard = ({
           width={13.5}
           height={13.5}
         />
-        <p className="text-sm">{duration} minutes</p>
+        <p
+          style={{
+            fontFamily: '"Syne", sans-serif',
+            fontWeight: 500,
+            fontSize: "12px",
+            lineHeight: "16px",
+            letterSpacing: "0.3px",
+            color: "#475668",
+          }}
+        >
+          {duration} min
+        </p>
       </div>
 
-      <Link href={`/companions/${id}`} className="w-full">
-        <button className="btn-primary w-full justify-center">
+      {/* Launch button */}
+      <Link href={`/companions/${id}`} className="w-full pr-6">
+        <button
+          className="w-full flex items-center justify-center gap-2"
+          style={{
+            backgroundColor: accentColor === "#fbbf24" ? "rgba(251, 191, 36, 0.09)" : "#182030",
+            border: `1px solid ${accentColor}`,
+            borderRadius: "8px",
+            padding: "8px 16px",
+            cursor: "pointer",
+            fontFamily: '"Syne", sans-serif',
+            fontWeight: 700,
+            fontSize: "14px",
+            lineHeight: "21px",
+            letterSpacing: "0.35px",
+            color: accentColor,
+          }}
+        >
           Launch Lesson
         </button>
       </Link>
